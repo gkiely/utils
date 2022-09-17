@@ -1,5 +1,5 @@
 {
-  "version": "0.1.7",
+  "version": "0.1.8",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -20,6 +20,10 @@
     "size": "size-limit",
     "analyze": "size-limit --why",
     "pub": "npm version patch --force && npm run prepare && npm publish --access=public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gkiely/utils.git"
   },
   "peerDependencies": {},
   "husky": {
