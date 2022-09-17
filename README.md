@@ -12,8 +12,6 @@ Methods:
 
 ## Development
 
-TSDX scaffolds your new library inside `/src`.
-
 To run TSDX, use:
 
 ```bash
