@@ -1,0 +1,1 @@
+- Move from tsdx to your own custom vite build that only outputs esm/ES6
