@@ -1,4 +1,4 @@
-function assertType<T>(_value: unknown): asserts _value is T {}
+export function assertType<T>(_value: unknown): asserts _value is T {}
 
 const getValueType = (value: unknown) => {
   const t = typeof value;
