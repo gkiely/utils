@@ -64,6 +64,14 @@ describe('isEqual', () => {
     [{ key: {} }, { k: '1' }],
     [{ key: {} }, { key: [] }],
     [{}, { k: '1' }],
+    [
+      {
+        key: NaN,
+      },
+      {
+        key: 1,
+      },
+    ],
     [{}, []],
   ])('isEqual(%o, %o) -> false', (value, other) => {
     expect(isEqual(value, other)).toBe(false);

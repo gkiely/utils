@@ -15,11 +15,11 @@ export const isEqual = (value: unknown, other: unknown): boolean => {
   if (value === other) return true;
   const valueType = getValueType(value);
   const otherType = getValueType(other);
-  const arr = [valueType, otherType];
+  const types = [valueType, otherType];
 
-  if (arr.includes('NaN')) return true;
+  if (types.every(o => o === 'NaN')) return true;
 
-  const hasObject = arr.some(o => ['object', 'array'].includes(o));
+  const hasObject = types.some(o => ['object', 'array'].includes(o));
   if (!hasObject) {
     return value === other;
   }
