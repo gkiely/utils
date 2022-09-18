@@ -1,7 +1,8 @@
+- Fix tests to use all
+- Move from tsdx to your own custom vite build that only outputs esm/ES6
 - Add bundle size and performance table
   - Bundle size: 
   - Performance: 5.5x faster than lodash
-- Move from tsdx to your own custom vite build that only outputs esm/ES6
 
 ## isEqual - performance
 utils:

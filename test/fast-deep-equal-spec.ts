@@ -397,4 +397,4 @@ export default [
       },
     ],
   },
-];
+] as const;

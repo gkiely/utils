@@ -1,8 +1,7 @@
 {
-  "version": "0.1.17",
+  "version": "0.1.16",
   "license": "MIT",
-  "type": "module",
-  "exports": "./dist/utils.esm.js",
+  "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist",

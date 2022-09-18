@@ -3,16 +3,17 @@ import { isEqual } from '../src';
 import specTests from './fast-deep-equal-spec';
 
 const tests = specTests.map(o => o.tests).flat();
-export const passTests = tests
+export const passTestsSpec = tests
   .filter(o => o.equal)
   .map(o => [o.value1, o.value2]);
-export const failTests = tests
+export const failTestsSpec = tests
   .filter(o => !o.equal)
   .map(o => [o.value1, o.value2]);
 
 // console.log(passingSpecTests);
 
-export const passTestsOrig = [
+export const passTests = [
+  // ...passTestsSpec,
   [{}, {}],
   [[], []],
   [{ key: 'value' }, { key: 'value' }],
@@ -78,7 +79,8 @@ export const passTestsOrig = [
 function func1() {}
 function func2() {}
 
-export const failTestsOrig = [
+export const failTests = [
+  // ...failTestsSpec,
   [{ key: '1' }, { k: '1' }],
   [{ key: {} }, { k: '1' }],
   [{ key: {} }, { key: [] }],
