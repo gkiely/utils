@@ -1,1 +1,19 @@
+- Add bundle size and performance table
+  - Bundle size: 
+  - Performance: 5.5x faster than lodash
 - Move from tsdx to your own custom vite build that only outputs esm/ES6
+
+## isEqual - performance
+utils:
+lodash:
+nanoEqual: 
+
+## isEqual - bundle size
+utils:
+lodash:
+nanoEqual: 
+
+
+
+
+

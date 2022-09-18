@@ -44,7 +44,7 @@ export const isEqual = (value: unknown, other: unknown): boolean => {
 
   return (
     valueKeys.length === otherKeys.length &&
-    !valueKeys.some(k => !isEqual(value[k], other[k]))
+    !valueKeys.some(k => (k in other ? !isEqual(value[k], other[k]) : true))
   );
 };
 

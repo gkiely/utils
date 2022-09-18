@@ -3,10 +3,12 @@ import { isEqual } from '../src';
 describe('isEqual', () => {
   test.each([
     [{}, {}],
+    [[], []],
     [{ key: 'value' }, { key: 'value' }],
     [{ key: 1 }, { key: 1 }],
     [{ key: {} }, { key: {} }],
     [{ key: [1] }, { key: [1] }],
+    [{ key: Infinity }, { key: Infinity }],
     [
       {
         key: NaN,
@@ -65,6 +67,10 @@ describe('isEqual', () => {
     [{ key: {} }, { key: [] }],
     [{}, { k: '1' }],
     [{ key: [] }, { key: [1] }],
+    [undefined, {}],
+    [[], {}],
+    [{ key: Infinity }, { key: -Infinity }],
+    [{ foo: undefined }, { bar: undefined }],
     [
       {
         key: NaN,

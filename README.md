@@ -1,6 +1,6 @@
 # User Guide
 
-Small and efficient utility functions, well tested and optimized for ES6 and bundle size
+Small and efficient utility functions, well tested and optimized for bundle size and performance
 
 Methods:
 
