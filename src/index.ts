@@ -32,8 +32,11 @@ export const isEqual = (value: unknown, other: unknown): boolean => {
   const otherType = getValueType(other);
   if (valueType !== otherType) return false;
   if (valueType === types.NaN && otherType === types.NaN) return true;
-  if (valueType === types.date && otherType === types.date)
-    return valueType === otherType;
+  if (valueType === types.date && otherType === types.date) {
+    assertType<Date>(value);
+    assertType<Date>(other);
+    return value.getTime() === other.getTime();
+  }
 
   const hasObject =
     valueType === types.object ||

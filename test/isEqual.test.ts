@@ -75,6 +75,10 @@ describe('isEqual', () => {
     [{ key: Infinity }, { key: -Infinity }],
     [{ foo: undefined }, { bar: undefined }],
     [new Date(2020, 9, 25), {}],
+    [
+      new Date('2017-06-16T21:36:48.362Z'),
+      new Date('2017-01-01T00:00:00.000Z'),
+    ],
     [true, false],
     [null, {}],
     [
