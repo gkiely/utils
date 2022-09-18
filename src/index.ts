@@ -1,38 +1,51 @@
+type Obj = Record<string, unknown>;
 export function assertType<T>(_value: unknown): asserts _value is T {}
+
+const types = {
+  NaN: 'NaN',
+  object: 'object',
+  array: 'array',
+  number: 'number',
+} as const;
 
 const getValueType = (value: unknown) => {
   const t = typeof value;
-  if (t === 'object' && Array.isArray(value)) return 'array';
-  if (t === 'object' && value !== null) return 'object';
-  if (t === 'number' && Number.isNaN(value)) return 'NaN';
+  if (t === types.object && Array.isArray(value)) return 'array';
+  if (t === types.object && value !== null) return 'object';
+  if (t === types.number && Number.isNaN(value)) return 'NaN';
   return t;
 };
 
 // Inspired by:
 // https://github.com/smelukov/nano-equal
 // https://stackoverflow.com/a/32922084/1845423
+// This function is benchmarked using vitest bench
 export const isEqual = (value: unknown, other: unknown): boolean => {
   if (value === other) return true;
   const valueType = getValueType(value);
   const otherType = getValueType(other);
-  const types = [valueType, otherType];
-
-  if (types.every(o => o === 'NaN')) return true;
-
-  const hasObject = types.some(o => ['object', 'array'].includes(o));
-  if (!hasObject) {
-    return value === other;
-  }
   if (valueType !== otherType) return false;
+  if (valueType === types.NaN && otherType === types.NaN) return true;
 
-  assertType<Record<string, unknown>>(value);
-  assertType<Record<string, unknown>>(other);
+  const hasObject =
+    valueType === types.object ||
+    valueType === types.array ||
+    otherType === types.object ||
+    otherType === types.array;
 
-  const v = Object.keys(value);
-  const o = Object.keys(other);
-  if (v.length === 0 && o.length === 0) return true;
+  if (!hasObject) return value === other;
 
-  return v.length === o.length && v.every(k => isEqual(value[k], other[k]));
+  assertType<Obj>(value);
+  assertType<Obj>(other);
+
+  const valueKeys = Object.keys(value);
+  const otherKeys = Object.keys(other);
+  if (valueKeys.length === 0 && otherKeys.length === 0) return true;
+
+  return (
+    valueKeys.length === otherKeys.length &&
+    !valueKeys.some(k => !isEqual(value[k], other[k]))
+  );
 };
 
 export function pick<T extends object, K extends keyof T>(

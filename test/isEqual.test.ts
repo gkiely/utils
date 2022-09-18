@@ -64,6 +64,7 @@ describe('isEqual', () => {
     [{ key: {} }, { k: '1' }],
     [{ key: {} }, { key: [] }],
     [{}, { k: '1' }],
+    [{ key: [] }, { key: [1] }],
     [
       {
         key: NaN,
@@ -73,6 +74,40 @@ describe('isEqual', () => {
       },
     ],
     [{}, []],
+    [
+      {
+        parent: [],
+        key: {},
+      },
+      {
+        parent: {},
+        key: {},
+      },
+    ],
+    [
+      {
+        parent: {
+          child: [
+            {
+              nested: {
+                nested: {},
+              },
+            },
+          ],
+        },
+      },
+      {
+        parent: {
+          child: [
+            {
+              nested: {
+                changed: {},
+              },
+            },
+          ],
+        },
+      },
+    ],
   ])('isEqual(%o, %o) -> false', (value, other) => {
     expect(isEqual(value, other)).toBe(false);
   });
