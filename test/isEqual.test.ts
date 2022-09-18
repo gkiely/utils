@@ -1,6 +1,18 @@
 import { isEqual } from '../src';
 
-export const passTests = [
+import specTests from './fast-deep-equal-spec';
+
+const tests = specTests.map(o => o.tests).flat();
+export const passTests = tests
+  .filter(o => o.equal)
+  .map(o => [o.value1, o.value2]);
+export const failTests = tests
+  .filter(o => !o.equal)
+  .map(o => [o.value1, o.value2]);
+
+// console.log(passingSpecTests);
+
+export const passTestsOrig = [
   [{}, {}],
   [[], []],
   [{ key: 'value' }, { key: 'value' }],
@@ -66,7 +78,7 @@ export const passTests = [
 function func1() {}
 function func2() {}
 
-export const failTests = [
+export const failTestsOrig = [
   [{ key: '1' }, { k: '1' }],
   [{ key: {} }, { k: '1' }],
   [{ key: {} }, { key: [] }],
@@ -128,12 +140,14 @@ export const failTests = [
   ],
 ] as const;
 
-describe('isEqual', () => {
-  test.each(passTests)('isEqual(%o, %o) -> true', (value, other) => {
-    expect(isEqual(value, other)).toBe(true);
-  });
+if (process.env.NODE_ENV === 'test') {
+  describe('isEqual', () => {
+    test.each(passTests)('isEqual(%o, %o) -> true', (value, other) => {
+      expect(isEqual(value, other)).toBe(true);
+    });
 
-  test.each(failTests)('isEqual(%o, %o) -> false', (value, other) => {
-    expect(isEqual(value, other)).toBe(false);
+    test.each(failTests)('isEqual(%o, %o) -> false', (value, other) => {
+      expect(isEqual(value, other)).toBe(false);
+    });
   });
-});
+}

@@ -14,6 +14,7 @@
     "bench": "vite-node test/benchmark",
     "start": "tsdx watch",
     "build": "tsdx build",
+    "build-tsc": "tsc --noEmit false",
     "test-all": "tsdx test",
     "test": "tsdx test --watch",
     "lint": "tsdx lint",
@@ -50,8 +51,12 @@
       "limit": "10 KB"
     }
   ],
+  "browserslist": [
+    "defaults and supports es6-module"
+  ],
   "devDependencies": {
     "@size-limit/preset-small-lib": "^8.1.0",
+    "benchmark": "^2.1.4",
     "husky": "^8.0.1",
     "size-limit": "^8.1.0",
     "tsdx": "^0.14.1",
