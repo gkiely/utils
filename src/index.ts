@@ -7,6 +7,7 @@ const types = {
   array: 'array',
   number: 'number',
   date: 'date',
+  null: 'null',
 } as const;
 
 const getValueType = (value: unknown) => {
@@ -17,6 +18,7 @@ const getValueType = (value: unknown) => {
     return types.object;
   }
   if (t === types.number && Number.isNaN(value)) return types.NaN;
+  if (value === null) return types.null;
   return t;
 };
 
