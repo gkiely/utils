@@ -8,6 +8,8 @@ const types = {
   number: 'number',
   date: 'date',
   null: 'null',
+  function: 'function',
+  regexp: 'regexp',
 } as const;
 
 const getValueType = (value: unknown) => {
@@ -15,6 +17,7 @@ const getValueType = (value: unknown) => {
   if (t === types.object && value !== null) {
     if (Array.isArray(value)) return types.array;
     if (value instanceof Date) return types.date;
+    if (value instanceof RegExp) return types.regexp;
     return types.object;
   }
   if (t === types.number && Number.isNaN(value)) return types.NaN;
@@ -36,6 +39,14 @@ export const isEqual = (value: unknown, other: unknown): boolean => {
     assertType<Date>(value);
     assertType<Date>(other);
     return value.getTime() === other.getTime();
+  }
+  if (valueType === types.function && otherType === types.function) {
+    return valueType.toString() === otherType.toString();
+  }
+  if (valueType === types.regexp && otherType === types.regexp) {
+    assertType<RegExp>(value);
+    assertType<RegExp>(other);
+    return value.source === other.source && value.flags === other.flags;
   }
 
   const hasObject =
