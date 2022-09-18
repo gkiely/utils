@@ -63,6 +63,9 @@ export const passTests = [
   ],
 ] as const;
 
+function func1() {}
+function func2() {}
+
 export const failTests = [
   [{ key: '1' }, { k: '1' }],
   [{ key: {} }, { k: '1' }],
@@ -78,6 +81,8 @@ export const failTests = [
   [true, false],
   [null, {}],
   [/test/, /fail/],
+  [{ toString: () => 'test' }, { toString: () => 'fail' }],
+  [func1, func2],
   [
     {
       key: NaN,

@@ -41,7 +41,9 @@ export const isEqual = (value: unknown, other: unknown): boolean => {
     return value.getTime() === other.getTime();
   }
   if (valueType === types.function && otherType === types.function) {
-    return valueType.toString() === otherType.toString();
+    assertType<Function>(value);
+    assertType<Function>(other);
+    return value.toString() === other.toString();
   }
   if (valueType === types.regexp && otherType === types.regexp) {
     assertType<RegExp>(value);
