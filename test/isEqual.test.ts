@@ -71,6 +71,7 @@ describe('isEqual', () => {
     [[], {}],
     [{ key: Infinity }, { key: -Infinity }],
     [{ foo: undefined }, { bar: undefined }],
+    [new Date(2020, 9, 25), {}],
     [
       {
         key: NaN,

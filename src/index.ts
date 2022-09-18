@@ -6,13 +6,17 @@ const types = {
   object: 'object',
   array: 'array',
   number: 'number',
+  date: 'date',
 } as const;
 
 const getValueType = (value: unknown) => {
   const t = typeof value;
-  if (t === types.object && Array.isArray(value)) return 'array';
-  if (t === types.object && value !== null) return 'object';
-  if (t === types.number && Number.isNaN(value)) return 'NaN';
+  if (t === types.object && value !== null) {
+    if (Array.isArray(value)) return types.array;
+    if (value instanceof Date) return types.date;
+    return types.object;
+  }
+  if (t === types.number && Number.isNaN(value)) return types.NaN;
   return t;
 };
 
@@ -26,6 +30,8 @@ export const isEqual = (value: unknown, other: unknown): boolean => {
   const otherType = getValueType(other);
   if (valueType !== otherType) return false;
   if (valueType === types.NaN && otherType === types.NaN) return true;
+  if (valueType === types.date && otherType === types.date)
+    return valueType === otherType;
 
   const hasObject =
     valueType === types.object ||
