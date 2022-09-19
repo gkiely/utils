@@ -1,8 +1,12 @@
 Todo:
 - Setup a benchmark script that runs all fast-deep-equals tests and fast-equals
 - It has to be the smallest
+  - Come up with a pipeline that builds it and
 - Push to twitter
 
+
+Then:
+- Get it smaller than fast-deep-equal
 - Move from tsdx to your own custom vite build that only outputs esm/ES6
 - Add bundle size and performance table
   - Bundle size: 
