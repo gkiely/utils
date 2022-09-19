@@ -1,8 +1,6 @@
 Todo:
-- Double check results
-  - Run it against fast-deep-equals test suite, and run it against fast-equals tests as well
-  - Make sure you've got the correct size
-
+- Setup a benchmark script that runs all fast-deep-equals tests and fast-equals
+- Make sure you've got the correct size
 - Push to twitter
 
 - Move from tsdx to your own custom vite build that only outputs esm/ES6
