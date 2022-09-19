@@ -1,10 +1,10 @@
-Tmrw
+Todo:
 - Double check results
   - Run it against fast-deep-equals test suite, and run it against fast-equals tests as well
   - Make sure you've got the correct size
 
-- Investigate running in node with esm, is it faster?
-- Fix tests to use all
+- Push to twitter
+
 - Move from tsdx to your own custom vite build that only outputs esm/ES6
 - Add bundle size and performance table
   - Bundle size: 
