@@ -51,20 +51,19 @@ export const isEqual = (value: unknown, other: unknown): boolean => {
     return value.source === other.source && value.flags === other.flags;
   }
 
-  const hasObject =
+  const isObject =
     valueType === types.object ||
     valueType === types.array ||
     otherType === types.object ||
     otherType === types.array;
 
-  if (!hasObject) return value === other;
+  if (!isObject) return value === other;
 
   assertType<Obj>(value);
   assertType<Obj>(other);
 
   const valueKeys = Object.keys(value);
   const otherKeys = Object.keys(other);
-  if (valueKeys.length === 0 && otherKeys.length === 0) return true;
 
   return (
     valueKeys.length === otherKeys.length &&
