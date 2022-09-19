@@ -26,7 +26,9 @@ export const passTests = [
   [null, null],
   [NaN, NaN],
   [true, true],
-  [{ toString: () => 'Hello world!' }, { toString: () => 'Hello world!' }],
+  [() => {}, () => {}],
+  [{ fn: () => '' }, { fn: () => '' }],
+  [{ toString: () => '' }, { toString: () => '' }],
   [/test/, /test/],
   [
     {

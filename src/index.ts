@@ -9,7 +9,8 @@ export const isEqual = (value: unknown, other: unknown): boolean => {
   const valueType = typeof value;
   const otherType = typeof other;
   if (valueType !== otherType) return false;
-  if (Number.isNaN(value) && Number.isNaN(other)) return true;
+  // NaN
+  if (value !== value && other !== other) return true;
   if (value instanceof Date || other instanceof Date) {
     assertType<Date>(value);
     assertType<Date>(other);
@@ -36,8 +37,8 @@ export const isEqual = (value: unknown, other: unknown): boolean => {
     if (Array.isArray(value) || Array.isArray(other)) {
       assertType<Obj[]>(value);
       assertType<Obj[]>(other);
-      if (value.length !== other.length) return false;
       let i = value.length;
+      if (i !== other.length) return false;
       while (i-- > 0) {
         if (!isEqual(value[i], other[i])) return false;
       }
