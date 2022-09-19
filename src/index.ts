@@ -1,65 +1,48 @@
 type Obj = Record<string, unknown>;
-export function assertType<T>(_value: unknown): asserts _value is T {}
-
-const types = {
-  NaN: 'NaN',
-  object: 'object',
-  array: 'array',
-  number: 'number',
-  date: 'date',
-  null: 'null',
-  function: 'function',
-  regexp: 'regexp',
-} as const;
-
-const getValueType = (value: unknown) => {
-  const t = typeof value;
-  if (t === types.object) {
-    if (value === null) return types.null;
-    if (Array.isArray(value)) return types.array;
-    if (value instanceof Date) return types.date;
-    if (value instanceof RegExp) return types.regexp;
-    return types.object;
-  }
-  if (t === types.number && Number.isNaN(value)) return types.NaN;
-  return t;
-};
+function assertType<T>(_value: unknown): asserts _value is T {}
 
 // Inspired by:
 // https://github.com/smelukov/nano-equal
 // https://stackoverflow.com/a/32922084/1845423
 // This function is benchmarked using vitest bench
 export const isEqual = (value: unknown, other: unknown): boolean => {
-  const valueType = getValueType(value);
-  const otherType = getValueType(other);
+  const valueType = typeof value;
+  const otherType = typeof other;
   if (valueType !== otherType) return false;
-  if (valueType === types.NaN) return valueType === otherType;
-  if (valueType === types.date && otherType === types.date) {
+  if (Number.isNaN(value) && Number.isNaN(other)) return true;
+  if (value instanceof Date || other instanceof Date) {
     assertType<Date>(value);
     assertType<Date>(other);
-    return value.getTime() === other.getTime();
+
+    return (
+      value instanceof Date &&
+      other instanceof Date &&
+      value.getTime() === other.getTime()
+    );
   }
-  if (valueType === types.function && otherType === types.function) {
+  if (valueType === 'function' && otherType === 'function') {
     assertType<() => void>(value);
     assertType<() => void>(other);
     return value.toString() === other.toString();
   }
-  if (valueType === types.regexp && otherType === types.regexp) {
+  if (value instanceof RegExp && other instanceof RegExp) {
     assertType<RegExp>(value);
     assertType<RegExp>(other);
     return value.source === other.source && value.flags === other.flags;
   }
-  if (valueType === types.array && otherType === types.array) {
-    assertType<Obj[]>(value);
-    assertType<Obj[]>(other);
-    if (value.length !== other.length) return false;
-    let i = value.length;
-    while (i-- > 0) {
-      if (!isEqual(value[i], other[i])) return false;
+
+  if (value === null || other === null) return value === other;
+  if (valueType === 'object' && otherType === 'object') {
+    if (Array.isArray(value) || Array.isArray(other)) {
+      assertType<Obj[]>(value);
+      assertType<Obj[]>(other);
+      if (value.length !== other.length) return false;
+      let i = value.length;
+      while (i-- > 0) {
+        if (!isEqual(value[i], other[i])) return false;
+      }
+      return true;
     }
-    return true;
-  }
-  if (valueType === types.object && otherType === types.object) {
     assertType<Obj>(value);
     assertType<Obj>(other);
     let hasKeys = false;
