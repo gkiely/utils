@@ -952,6 +952,11 @@
     "exec-sh" "^0.3.2"
     "minimist" "^1.2.0"
 
+"@gkiely/utils@^0.1.21":
+  "integrity" "sha512-AijcgKViGupadXSM1ndPBLwfWoikcQnWRyQAJVnLrkryVteJZYWqGH/fRh3nC3mjYZ9PZwnYcgJchzLOyZ8CcA=="
+  "resolved" "https://registry.npmjs.org/@gkiely/utils/-/utils-0.1.21.tgz"
+  "version" "0.1.21"
+
 "@istanbuljs/load-nyc-config@^1.0.0":
   "integrity" "sha512-VjeHSlIzpv/NyD3N0YuHfXOPDIixcA1q2ZV98wsMqcYlPmv2n3Yb2lYP9XMElnaFVXg5A7YLTeLu6V84uQDjmQ=="
   "resolved" "https://registry.npmjs.org/@istanbuljs/load-nyc-config/-/load-nyc-config-1.1.0.tgz"

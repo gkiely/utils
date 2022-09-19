@@ -14,14 +14,14 @@ const types = {
 
 const getValueType = (value: unknown) => {
   const t = typeof value;
-  if (t === types.object && value !== null) {
+  if (t === types.object) {
+    if (value === null) return types.null;
     if (Array.isArray(value)) return types.array;
     if (value instanceof Date) return types.date;
     if (value instanceof RegExp) return types.regexp;
     return types.object;
   }
   if (t === types.number && Number.isNaN(value)) return types.NaN;
-  if (value === null) return types.null;
   return t;
 };
 
@@ -30,7 +30,6 @@ const getValueType = (value: unknown) => {
 // https://stackoverflow.com/a/32922084/1845423
 // This function is benchmarked using vitest bench
 export const isEqual = (value: unknown, other: unknown): boolean => {
-  if (value === other) return true;
   const valueType = getValueType(value);
   const otherType = getValueType(other);
   if (valueType !== otherType) return false;
@@ -51,24 +50,32 @@ export const isEqual = (value: unknown, other: unknown): boolean => {
     return value.source === other.source && value.flags === other.flags;
   }
 
-  const isObject =
-    valueType === types.object ||
-    valueType === types.array ||
-    otherType === types.object ||
-    otherType === types.array;
-
+  const isObject = valueType === types.object || valueType === types.array;
   if (!isObject) return value === other;
+
+  if (valueType === types.array && otherType === types.array) {
+    assertType<Obj[]>(value);
+    assertType<Obj[]>(other);
+    if (value.length !== other.length) return false;
+    let i = value.length;
+    while (i-- > 0) {
+      if (!isEqual(value[i], other[i])) return false;
+    }
+    return true;
+  }
 
   assertType<Obj>(value);
   assertType<Obj>(other);
-
-  const valueKeys = Object.keys(value);
-  const otherKeys = Object.keys(other);
-
-  return (
-    valueKeys.length === otherKeys.length &&
-    !valueKeys.some(k => (k in other ? !isEqual(value[k], other[k]) : true))
-  );
+  let hasKeys = false;
+  for (const k in value) {
+    !hasKeys && (hasKeys = true);
+    if (!Object.prototype.hasOwnProperty.call(other, k)) return false;
+    if (!isEqual(value[k], other[k])) return false;
+  }
+  if (!hasKeys) {
+    return Object.keys(other).length === 0;
+  }
+  return true;
 };
 
 export function pick<T extends object, K extends keyof T>(

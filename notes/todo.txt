@@ -1,3 +1,9 @@
+Tmrw
+- Double check results
+  - Run benchmarks after compiling
+  - Run it against fast-deep-equals tests, and run it against fast-equals tests as well
+  - Make sure you've got the correct size
+
 - Investigate running in node with esm, is it faster?
 - Fix tests to use all
 - Move from tsdx to your own custom vite build that only outputs esm/ES6

@@ -13,7 +13,6 @@ export const failTestsSpec = tests
 // console.log(passingSpecTests);
 
 export const passTests = [
-  // ...passTestsSpec,
   [{}, {}],
   [[], []],
   [{ key: 'value' }, { key: 'value' }],
@@ -23,6 +22,9 @@ export const passTests = [
   [{ key: Infinity }, { key: Infinity }],
   [{ key: null }, { key: null }],
   [{ key: undefined }, { key: undefined }],
+  [undefined, undefined],
+  [null, null],
+  [NaN, NaN],
   [true, true],
   [{ toString: () => 'Hello world!' }, { toString: () => 'Hello world!' }],
   [/test/, /test/],
@@ -80,7 +82,6 @@ function func1() {}
 function func2() {}
 
 export const failTests = [
-  // ...failTestsSpec,
   [{ key: '1' }, { k: '1' }],
   [{ key: {} }, { k: '1' }],
   [{ key: {} }, { key: [] }],
@@ -94,6 +95,7 @@ export const failTests = [
   [new Date('2017-06-16T21:36:48.362Z'), new Date('2017-01-01T00:00:00.000Z')],
   [true, false],
   [null, {}],
+  [undefined, null],
   [/test/, /fail/],
   [{ toString: () => 'test' }, { toString: () => 'fail' }],
   [func1, func2],
