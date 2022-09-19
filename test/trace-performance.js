@@ -1,6 +1,4 @@
-type Obj = Record<string, unknown>;
-export function assertType<T>(_value: unknown): asserts _value is T {}
-
+// Command: node --trace_opt ./test/trace-performance.js | grep isEqual
 const types = {
   NaN: 'NaN',
   object: 'object',
@@ -10,10 +8,11 @@ const types = {
   null: 'null',
   function: 'function',
   regexp: 'regexp',
-} as const;
+};
 
-const getValueType = (value: unknown) => {
+const getValueType = value => {
   const t = typeof value;
+
   if (t === types.object) {
     if (value === null) return types.null;
     if (Array.isArray(value)) return types.array;
@@ -21,88 +20,63 @@ const getValueType = (value: unknown) => {
     if (value instanceof RegExp) return types.regexp;
     return types.object;
   }
+
   if (t === types.number && Number.isNaN(value)) return types.NaN;
   return t;
 };
 
-// Inspired by:
-// https://github.com/smelukov/nano-equal
-// https://stackoverflow.com/a/32922084/1845423
-// This function is benchmarked using vitest bench
-export const isEqual = (value: unknown, other: unknown): boolean => {
+const isEqual = (value, other) => {
   const valueType = getValueType(value);
   const otherType = getValueType(other);
   if (valueType !== otherType) return false;
   if (valueType === types.NaN) return valueType === otherType;
+
   if (valueType === types.date && otherType === types.date) {
-    assertType<Date>(value);
-    assertType<Date>(other);
     return value.getTime() === other.getTime();
   }
+
   if (valueType === types.function && otherType === types.function) {
-    assertType<() => void>(value);
-    assertType<() => void>(other);
     return value.toString() === other.toString();
   }
+
   if (valueType === types.regexp && otherType === types.regexp) {
-    assertType<RegExp>(value);
-    assertType<RegExp>(other);
     return value.source === other.source && value.flags === other.flags;
   }
+
   if (valueType === types.array && otherType === types.array) {
-    assertType<Obj[]>(value);
-    assertType<Obj[]>(other);
     if (value.length !== other.length) return false;
     let i = value.length;
+
     while (i-- > 0) {
       if (!isEqual(value[i], other[i])) return false;
     }
+
     return true;
   }
+
   if (valueType === types.object && otherType === types.object) {
-    assertType<Obj>(value);
-    assertType<Obj>(other);
     let hasKeys = false;
+
     for (const k in value) {
       !hasKeys && (hasKeys = true);
       if (!Object.prototype.hasOwnProperty.call(other, k)) return false;
       if (!isEqual(value[k], other[k])) return false;
     }
+
     if (!hasKeys) {
       return Object.keys(other).length === 0;
     }
+
     return true;
   }
 
   return value === other;
 };
 
-export function pick<T extends object, K extends keyof T>(
-  obj: T,
-  ...keys: K[]
-) {
-  const result: Partial<T> = {};
-  for (const key of keys) {
-    if (key in obj) {
-      result[key] = obj[key];
-    }
-  }
-  return result as Required<Pick<T, K>>;
+let k = 1e6;
+
+console.time('isEqual');
+while (k--) {
+  isEqual({}, {});
 }
-
-export const isObject = (value: unknown): value is object => {
-  return typeof value === 'object' && !Array.isArray(value) && value !== null;
-};
-
-export const omit = (obj: object, ...keys: string[]) => {
-  const result: { [key: string]: unknown } = {};
-  for (const key in obj) {
-    if (!keys.includes(key)) {
-      result[key] = obj[key as keyof typeof obj];
-    }
-  }
-  return result;
-};
-
-export const delay = (ms: number) =>
-  new Promise(resolve => setTimeout(resolve, ms));
+console.timeEnd('isEqual');
