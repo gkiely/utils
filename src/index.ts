@@ -1,5 +1,5 @@
 type Obj = Record<string, unknown>;
-function assertType<T>(_value: unknown): asserts _value is T {}
+export function assertType<T>(_value: unknown): asserts _value is T {}
 
 // Inspired by:
 // https://github.com/smelukov/nano-equal
