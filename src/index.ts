@@ -56,14 +56,11 @@ export const isEqual = (value: unknown, other: unknown): boolean => {
   assertType<Obj>(other);
   let hasKeys = false;
   for (const k in value) {
-    !hasKeys && (hasKeys = true);
     if (!Object.prototype.hasOwnProperty.call(other, k)) return false;
     if (!isEqual(value[k], other[k])) return false;
+    !hasKeys && (hasKeys = true);
   }
-  if (!hasKeys) {
-    return Object.keys(other).length === 0;
-  }
-  return true;
+  return hasKeys ? true : Object.keys(other).length === 0;
 };
 
 export function pick<T extends object, K extends keyof T>(

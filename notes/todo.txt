@@ -1,4 +1,8 @@
 Todo:
+- Test all production bundles inline
+  - Download all bundles and test
+- Hand minify, because the minification slows it down
+
 - Setup a benchmark script that runs all fast-deep-equals tests and fast-equals
 - Setup standalone npm repo "quick-equal"
 - Send to people and dev-stuff to review
