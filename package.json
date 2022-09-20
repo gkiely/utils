@@ -52,7 +52,7 @@
     }
   ],
   "browserslist": [
-    "defaults and supports es6-module"
+    "chrome 105"
   ],
   "devDependencies": {
     "@size-limit/preset-small-lib": "^8.1.0",

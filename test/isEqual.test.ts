@@ -30,6 +30,7 @@ export const passTests = [
   [{ fn: () => '' }, { fn: () => '' }],
   [{ toString: () => '' }, { toString: () => '' }],
   [/test/, /test/],
+  [/test/g, /test/g],
   [
     {
       key: NaN,
@@ -99,6 +100,7 @@ export const failTests = [
   [null, {}],
   [undefined, null],
   [/test/, /fail/],
+  [/test/g, /test/i],
   [{ toString: () => 'test' }, { toString: () => 'fail' }],
   [func1, func2],
   [
