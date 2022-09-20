@@ -4,11 +4,10 @@ export function assertType<T>(_value: unknown): asserts _value is T {}
 // Inspired by:
 // https://github.com/smelukov/nano-equal
 // https://stackoverflow.com/a/32922084/1845423
-// This function is benchmarked using vitest bench
 
 // Test cases:
 // NaN: https://jsbench.me/ufl8alurdm/1
-// Function: https://jsbench.me/svl8alrui7/1
+// Function comparison: https://jsbench.me/svl8alrui7/1
 // Regex: https://jsbench.me/ctl8altfg2/1
 // Array: https://jsbench.me/osl8am10pi/3
 export const isEqual = (value: unknown, other: unknown): boolean => {

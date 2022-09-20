@@ -1,21 +1,17 @@
 Todo:
-- Setup isEqual and isEqualExtended
-  - isEqual supports JSON
-  - isEqualExtended also supports regex, functions, dates, cross context
-  https://stackoverflow.com/questions/15745427/how-do-you-check-if-an-object-is-a-regular-expression-across-v8-contexts
-- Setup a benchmark script against JSON.stringify
-
 - Setup a benchmark script that runs all fast-deep-equals tests and fast-equals
-- Send to Ray and another couple of people to double check
+- Setup standalone npm repo "quick-equal"
+- Send to people and dev-stuff to review
 - Set up a test case for JSON.stringify
-- Push to twitter
+- Push to twitter and reddit
 
-Then:
-- Get it smaller than fast-deep-equal
-- Move from tsdx to your own custom vite build that only outputs esm/ES6
-- Add bundle size and performance table
+Then
+- Add bundle size and performance table to readme
   - Bundle size: 
   - Performance: 5.5x faster than lodash
+
+- Handle cross context
+  https://stackoverflow.com/questions/15745427/how-do-you-check-if-an-object-is-a-regular-expression-across-v8-contexts
 
 ## isEqual - performance
 utils:
