@@ -10,8 +10,6 @@ export const failTestsSpec = tests
   .filter(o => !o.equal)
   .map(o => [o.value1, o.value2]);
 
-// console.log(passingSpecTests);
-
 const fn = () => {};
 const reg = /test/;
 
@@ -41,7 +39,7 @@ export const passTests = [
   [/test/, /test/],
   [/test/g, /test/g],
   [new Date(), new Date()],
-  // [new Date(2020, 9, 25), new Date(2020, 9, 25)],
+  [new Date(2020, 9, 25), new Date(2020, 9, 25)],
   [
     {
       key: NaN,
@@ -104,12 +102,17 @@ export const failTests = [
   [{ foo: undefined }, { bar: undefined }],
   [new Date(2020, 9, 25), {}],
   [{}, new Date(2020, 9, 25)],
-  [new Date('2017-06-16T21:36:48.362Z'), new Date('2017-01-01T00:00:00.000Z')],
+  [new Date('2016-01-01T00:00:00.000Z'), new Date('2017-01-01T00:00:00.000Z')],
   [true, false],
   [null, {}],
   [undefined, null],
-  // [/test/, /fail/],
-  // [/test/g, /test/i],
+  [{ getTime: true }, {}],
+  [{ getTime: true }, { getTime: 1 }],
+  [{ getTime: 0 }, { getTime: 1 }],
+  [{}, /test/],
+  [/test/, {}],
+  [/test/, /fail/],
+  [/test/g, /test/i],
   [{ toString: () => 'test' }, { toString: () => 'fail' }],
   [
     {

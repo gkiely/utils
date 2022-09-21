@@ -13,6 +13,7 @@ export const isEqual = (value: unknown, other: unknown): boolean => {
 
   // Anything that's not an object do a direct comparison
   if (!value || !other || valueType !== 'object' || otherType !== 'object') {
+    // Function comparison
     if (valueType === 'function' && otherType === 'function') {
       assertType<() => void>(value);
       assertType<() => void>(other);
@@ -41,17 +42,20 @@ export const isEqual = (value: unknown, other: unknown): boolean => {
   if (i !== Object.keys(other).length) return false;
 
   while (i-- > 0) {
-    if (!Object.prototype.hasOwnProperty.call(other, keys[i])) {
-      return false;
-    }
+    if (!Object.prototype.hasOwnProperty.call(other, keys[i])) return false;
   }
   i = keys.length;
 
   while (i-- > 0) {
     if (!isEqual(value[keys[i]], other[keys[i]])) return false;
-    if (keys[i] === 'source' && other.source) {
-      return value.source === other.source && value.flags === other.flags;
-    }
+  }
+
+  // RegExp
+  if (
+    (!Object.prototype.hasOwnProperty.call(value, 'source') && value.source) ||
+    (!Object.prototype.hasOwnProperty.call(other, 'source') && other.source)
+  ) {
+    return value.source === other.source && value.flags === other.flags;
   }
 
   // Date comparison
