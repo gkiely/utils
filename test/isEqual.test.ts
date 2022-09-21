@@ -25,6 +25,10 @@ export const passTests = [
   [{ key: Infinity }, { key: Infinity }],
   [{ key: null }, { key: null }],
   [{ key: undefined }, { key: undefined }],
+  [
+    { b: 'pass', a: 'pass' },
+    { a: 'pass', b: 'pass' },
+  ],
   [undefined, undefined],
   [null, null],
   [NaN, NaN],
