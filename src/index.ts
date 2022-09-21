@@ -1,5 +1,5 @@
 type Obj = Record<string, unknown>;
-export function assertType<T>(_value: unknown): asserts _value is T {}
+function assertType<T>(_value: unknown): asserts _value is T {}
 
 // Inspired by:
 // https://github.com/smelukov/nano-equal
@@ -8,59 +8,46 @@ export function assertType<T>(_value: unknown): asserts _value is T {}
 // Test cases:
 // NaN: https://jsbench.me/ufl8alurdm/1
 // Function comparison: https://jsbench.me/svl8alrui7/1
-// Regex: https://jsbench.me/ctl8altfg2/1
 // Array: https://jsbench.me/osl8am10pi/3
 export const isEqual = (value: unknown, other: unknown): boolean => {
   const valueType = typeof value;
   const otherType = typeof other;
+  let i, keys;
 
   // Anything other than an object, do a === compare
   if (!value || !other || valueType !== 'object' || otherType !== 'object') {
     // NaN shortcut
-    if (value !== value && other !== other) return true;
-    if (valueType === 'function' && otherType === 'function') {
-      assertType<() => void>(value);
-      assertType<() => void>(other);
-      return value.toString() === other.toString();
-    }
-    return value === other;
-  }
-
-  if (value instanceof Date || other instanceof Date) {
-    assertType<Date>(value);
-    assertType<Date>(other);
-
-    return (
-      value instanceof Date &&
-      other instanceof Date &&
-      value.getTime() === other.getTime()
-    );
-  }
-  if (value instanceof RegExp && other instanceof RegExp) {
-    assertType<RegExp>(value);
-    assertType<RegExp>(other);
-    return value.source === other.source && value.flags === other.flags;
+    return (value !== value && other !== other) || value === other;
   }
 
   if (Array.isArray(value) || Array.isArray(other)) {
     assertType<Obj[]>(value);
     assertType<Obj[]>(other);
-    let i = value.length;
+    i = value.length;
     if (i !== other.length) return false;
-    for (; i-- > 0; ) {
+
+    while (i-- > 0) {
       if (!isEqual(value[i], other[i])) return false;
     }
     return true;
   }
   assertType<Obj>(value);
   assertType<Obj>(other);
-  let hasKeys = false;
-  for (const k in value) {
-    if (!Object.prototype.hasOwnProperty.call(other, k)) return false;
-    if (!isEqual(value[k], other[k])) return false;
-    !hasKeys && (hasKeys = true);
+  keys = Object.keys(value);
+  i = keys.length;
+
+  if (i !== Object.keys(other).length) return false;
+
+  while (i-- > 0) {
+    if (!Object.prototype.hasOwnProperty.call(other, keys[i])) return false;
   }
-  return hasKeys ? true : Object.keys(other).length === 0;
+
+  i = keys.length;
+  while (i-- > 0) {
+    if (!isEqual(value[keys[i]], other[keys[i]])) return false;
+  }
+
+  return true;
 };
 
 export function pick<T extends object, K extends keyof T>(

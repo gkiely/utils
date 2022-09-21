@@ -1,4 +1,8 @@
 Todo:
+- Setup standalone lib
+- Push lib and post to twitter/reddit
+
+Then
 - Test all production bundles inline
   - Download all bundles and test
 - Hand minify, because the minification slows it down

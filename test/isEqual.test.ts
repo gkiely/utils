@@ -12,6 +12,9 @@ export const failTestsSpec = tests
 
 // console.log(passingSpecTests);
 
+const fn = () => {};
+const reg = /test/;
+
 export const passTests = [
   [{}, {}],
   [[], []],
@@ -26,11 +29,13 @@ export const passTests = [
   [null, null],
   [NaN, NaN],
   [true, true],
-  [() => {}, () => {}],
-  [{ fn: () => '' }, { fn: () => '' }],
-  [{ toString: () => '' }, { toString: () => '' }],
-  [/test/, /test/],
-  [/test/g, /test/g],
+  [fn, fn],
+  [reg, reg],
+  // [() => {}, () => {}],
+  // [{ fn: () => '' }, { fn: () => '' }],
+  // [{ toString: () => '' }, { toString: () => '' }],
+  // [/test/, /test/],
+  // [/test/g, /test/g],
   [
     {
       key: NaN,
@@ -81,9 +86,6 @@ export const passTests = [
   ],
 ] as const;
 
-function func1() {}
-function func2() {}
-
 export const failTests = [
   [{ key: '1' }, { k: '1' }],
   [{ key: {} }, { k: '1' }],
@@ -94,15 +96,15 @@ export const failTests = [
   [[], {}],
   [{ key: Infinity }, { key: -Infinity }],
   [{ foo: undefined }, { bar: undefined }],
-  [new Date(2020, 9, 25), {}],
-  [new Date('2017-06-16T21:36:48.362Z'), new Date('2017-01-01T00:00:00.000Z')],
+  // [new Date(2020, 9, 25), {}],
+  // [new Date('2017-06-16T21:36:48.362Z'), new Date('2017-01-01T00:00:00.000Z')],
   [true, false],
   [null, {}],
   [undefined, null],
-  [/test/, /fail/],
-  [/test/g, /test/i],
+  // [/test/, /fail/],
+  // [/test/g, /test/i],
   [{ toString: () => 'test' }, { toString: () => 'fail' }],
-  [func1, func2],
+  [() => {}, () => {}],
   [
     {
       key: NaN,
