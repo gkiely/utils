@@ -15,16 +15,16 @@ Methods:
 To run TSDX, use:
 
 ```bash
-npm start # or yarn start
+npm start
 ```
 
 This builds to `/dist` and runs the project in watch mode so any edits you save inside `src` causes a rebuild to `/dist`.
 
-To do a one-off build, use `npm run build` or `yarn build`.
+To do a one-off build, use `npm run build`
 
-To run tests, use `npm test-all` or `yarn test-all`.
+To run tests, use `npm test-all`
 
-To run tests in watch mode, use `npm test` or `yarn test`.
+To run tests in watch mode, use `npm test`
 
 ## Configuration
 
@@ -32,7 +32,7 @@ Code quality is set up for you with `prettier`, `husky`, and `lint-staged`. Adju
 
 ### Jest
 
-Jest tests are set up to run with `npm test` or `yarn test`.
+Jest tests are set up to run with `npm test`
 
 ### Bundle Analysis
 
