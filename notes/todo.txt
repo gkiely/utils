@@ -1,12 +1,16 @@
 Todo:
+- picoequal 230B: checks function reference, Date vs non-date
+- picoequal/extended: checks function value, Date.getTime() and regex
+  - supports Date.getTime, function, regex, adds
 - Setup standalone lib
+- Hand minify and test performance
+- Test all production bundles inline
+  - Download all bundles and test
+- Run multiple test suites
+  - Download the fast-equal test suite and run against it
 - Push lib and post to twitter/reddit
 
 Then
-- Test all production bundles inline
-  - Download all bundles and test
-- Hand minify, because the minification slows it down
-
 - Setup a benchmark script that runs all fast-deep-equals tests and fast-equals
 - Setup standalone npm repo "quick-equal"
 - Send to people and dev-stuff to review

@@ -1,0 +1,32 @@
+Date:
+  if (
+    Object.prototype.toString.call(value) === '[object Date]' ||
+    Object.prototype.toString.call(other) === '[object Date]'
+  ) {
+    assertType<Date>(value);
+    assertType<Date>(other);
+    return (
+      Object.prototype.toString.call(value) === '[object Date]' &&
+      Object.prototype.toString.call(other) === '[object Date]' &&
+      value.getTime() === other.getTime()
+    );
+  }
+
+
+Regex:
+  while (i-- > 0) {
+    if (!Object.prototype.hasOwnProperty.call(other, keys[i])) {
+      if (keys[i] === 'source' && other.source) {
+        return value.source === other.source && value.flags === other.flags;
+      }
+      return false;
+    }
+  }
+
+
+Function:
+if (valueType === 'function' && otherType === 'function') {
+  assertType<() => void>(value);
+  assertType<() => void>(other);
+  return value === other || value.toString() === other.toString();
+}

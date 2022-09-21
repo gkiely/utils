@@ -1,21 +1,23 @@
 type Obj = Record<string, unknown>;
-function assertType<T>(_value: unknown): asserts _value is T {}
+function assertType<T>(_: unknown): asserts _ is T {}
 
 // Inspired by:
 // https://github.com/smelukov/nano-equal
+// https://github.com/epoberezkin/fast-deep-equal
+// https://github.com/planttheidea/fast-equals
 // https://stackoverflow.com/a/32922084/1845423
-
-// Test cases:
-// NaN: https://jsbench.me/ufl8alurdm/1
-// Function comparison: https://jsbench.me/svl8alrui7/1
-// Array: https://jsbench.me/osl8am10pi/3
 export const isEqual = (value: unknown, other: unknown): boolean => {
   const valueType = typeof value;
   const otherType = typeof other;
   let i, keys;
 
-  // Anything other than an object, do a === compare
+  // Anything that's not an object do a direct comparison
   if (!value || !other || valueType !== 'object' || otherType !== 'object') {
+    if (valueType === 'function' && otherType === 'function') {
+      assertType<() => void>(value);
+      assertType<() => void>(other);
+      return value === other || value.toString() === other.toString();
+    }
     // NaN shortcut
     return (value !== value && other !== other) || value === other;
   }
@@ -39,12 +41,30 @@ export const isEqual = (value: unknown, other: unknown): boolean => {
   if (i !== Object.keys(other).length) return false;
 
   while (i-- > 0) {
-    if (!Object.prototype.hasOwnProperty.call(other, keys[i])) return false;
+    if (!Object.prototype.hasOwnProperty.call(other, keys[i])) {
+      return false;
+    }
   }
-
   i = keys.length;
+
   while (i-- > 0) {
     if (!isEqual(value[keys[i]], other[keys[i]])) return false;
+    if (keys[i] === 'source' && other.source) {
+      return value.source === other.source && value.flags === other.flags;
+    }
+  }
+
+  // Date comparison
+  if (value.getTime || other.getTime) {
+    if (!value.getTime || !other.getTime) return false;
+    if (
+      Object.prototype.toString.call(value) === '[object Date]' &&
+      Object.prototype.toString.call(other) === '[object Date]'
+    ) {
+      assertType<Date>(value);
+      assertType<Date>(other);
+      return value.getTime() === other.getTime();
+    }
   }
 
   return true;
