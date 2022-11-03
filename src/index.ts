@@ -33,3 +33,9 @@ export const omit = (obj: object, ...keys: string[]) => {
 
 export const delay = (ms: number) =>
   new Promise(resolve => setTimeout(resolve, ms));
+
+const print = console.log.bind(console);
+
+export function log(...args: unknown[]) {
+  return print(...args);
+}
