@@ -21,11 +21,20 @@ export const isObject = (value: unknown): value is object => {
   return typeof value === 'object' && !Array.isArray(value) && value !== null;
 };
 
-export const omit = (obj: object, ...keys: string[]) => {
-  const result: { [key: string]: unknown } = {};
+// https://stackoverflow.com/a/53968837
+interface OmitFunction {
+  <T extends object, K extends [...(keyof T)[]]>(obj: T, ...keys: K): {
+    [K2 in Exclude<keyof T, K[number]>]: T[K2];
+  };
+}
+
+export const omit: OmitFunction = (obj, ...keys) => {
+  const result = {} as {
+    [K in keyof typeof obj]: typeof obj[K];
+  };
   for (const key in obj) {
     if (!keys.includes(key)) {
-      result[key] = obj[key as keyof typeof obj];
+      result[key] = obj[key];
     }
   }
   return result;
