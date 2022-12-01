@@ -1,5 +1,23 @@
 import fastDeepEqual from 'fast-deep-equal';
 
+export type JSONValue =
+  | string
+  | number
+  | boolean
+  | null
+  | { [x: string]: JSONValue }
+  | Array<JSONValue>;
+export type JSONObject = Record<string, JSONValue>;
+export type JSValue =
+  | string
+  | number
+  | boolean
+  | null
+  | undefined
+  | { [x: string]: JSValue }
+  | Array<JSValue>;
+export type JSObject = Record<string, JSValue>;
+
 export const isEqual = fastDeepEqual as <A, B>(a: A, b: B) => boolean;
 
 export const assertType = <T>(_: unknown): asserts _ is T => {};
@@ -77,5 +95,37 @@ export const fetchJSON = async <Data = unknown>(
     },
     body,
   });
+  if (!response.ok) {
+    return Promise.reject(`Failed fetch: ${response.status}`);
+  }
   return response.json<Data>();
+};
+
+export const fetchText = async (url: string, options?: Options) => {
+  const response = await fetch(
+    url,
+    options ? (options as Omit<Options, 'body'>) : undefined
+  );
+  if (!response.ok) {
+    return Promise.reject(`Failed fetch: ${response.status}`);
+  }
+  return response.text();
+
+  // GET and POST version if needed
+  // if (!options || !('body' in options)) {
+  //   const response = await fetch(url, options ? (options as Omit<Options, 'body'>) : undefined);
+  //   return response.text() as Data;
+  // }
+  // const body = JSON.stringify(options.body);
+  // const response = await fetch(url, {
+  //   ...options,
+  //   method: 'POST',
+  //   headers: {
+  //     accept: 'text/html',
+  //     'content-type': 'text/plain',
+  //     ...options.headers,
+  //   },
+  //   body,
+  // });
+  // return response.text() as Data;
 };
