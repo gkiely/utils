@@ -82,7 +82,12 @@ export const fetchJSON = async <Data = unknown>(
       url,
       options ? (options as Omit<Options, 'body'>) : undefined
     );
-    return response.json<Data>();
+    const text = await response.text();
+    try {
+      return JSON.parse(text) as Data;
+    } catch {
+      return text;
+    }
   }
   const body = JSON.stringify(options.body);
   const response = await fetch(url, {
@@ -98,7 +103,13 @@ export const fetchJSON = async <Data = unknown>(
   if (!response.ok) {
     return Promise.reject(`Failed fetch: ${response.status}`);
   }
-  return response.json<Data>();
+  const text = await response.text();
+  try {
+    return JSON.parse(text) as Data;
+  } catch {
+    return text;
+  }
+  // return response.json<Data>();
 };
 
 export const fetchText = async (url: string, options?: Options) => {
