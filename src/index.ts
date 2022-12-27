@@ -17,6 +17,7 @@ export type JSValue =
   | { [x: string]: JSValue }
   | Array<JSValue>;
 export type JSObject = Record<string, JSValue>;
+export type JSONResponse = JSONObject | Array<JSONValue>;
 
 export const isEqual = fastDeepEqual as <A, B>(a: A, b: B) => boolean;
 
@@ -73,7 +74,8 @@ type Options = {
   body?: Record<string, unknown>;
 };
 
-export const fetchJSON = async <Data = unknown>(
+// Handles both text and JSON responses
+export const fetchData = async <Data = JSONResponse>(
   url: string,
   options?: Options
 ) => {
@@ -82,10 +84,14 @@ export const fetchJSON = async <Data = unknown>(
       url,
       options ? (options as Omit<Options, 'body'>) : undefined
     );
+    if (!response.ok) {
+      return Promise.reject(`Failed fetch: ${response.status}`);
+    }
     const text = await response.text();
     try {
       return JSON.parse(text) as Data;
     } catch {
+      if (!text) return undefined;
       return text;
     }
   }
@@ -109,7 +115,34 @@ export const fetchJSON = async <Data = unknown>(
   } catch {
     return text;
   }
-  // return response.json<Data>();
+};
+
+export const fetchJSON = async <Data = unknown>(
+  url: string,
+  options?: Options
+) => {
+  if (!options || !('body' in options)) {
+    const response = await fetch(
+      url,
+      options ? (options as Omit<Options, 'body'>) : undefined
+    );
+    return response.json<Data>();
+  }
+  const body = JSON.stringify(options.body);
+  const response = await fetch(url, {
+    ...options,
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      accept: 'application/json',
+      ...options.headers,
+    },
+    body,
+  });
+  if (!response.ok) {
+    return Promise.reject(`Failed fetch: ${response.status}`);
+  }
+  return response.json<Data>();
 };
 
 export const fetchText = async (url: string, options?: Options) => {
@@ -125,7 +158,10 @@ export const fetchText = async (url: string, options?: Options) => {
   // GET and POST version if needed
   // if (!options || !('body' in options)) {
   //   const response = await fetch(url, options ? (options as Omit<Options, 'body'>) : undefined);
-  //   return response.text() as Data;
+  //   if (!response.ok) {
+  //     return Promise.reject(`Failed fetch: ${response.status}`);
+  //   }
+  //   return response.text();
   // }
   // const body = JSON.stringify(options.body);
   // const response = await fetch(url, {
@@ -138,5 +174,5 @@ export const fetchText = async (url: string, options?: Options) => {
   //   },
   //   body,
   // });
-  // return response.text() as Data;
+  // return response.text();
 };
