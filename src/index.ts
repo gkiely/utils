@@ -151,7 +151,7 @@ export const fetchJSON = async <Data = unknown>(
       body,
     });
   }
-  return response.json() as Data;
+  return response.json<Data>();
 };
 
 export const fetchText = async (url: string, options?: Options) => {
