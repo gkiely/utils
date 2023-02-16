@@ -68,12 +68,6 @@ export const log = (...args: unknown[]) => {
   return print(...args);
 };
 
-type Options = {
-  method?: 'GET' | 'POST';
-  headers?: Record<string, string>;
-  body?: Record<string, unknown>;
-};
-
 // Handles both text and JSON responses
 export const fetchData = async <Data = JSONResponse>(
   url: string,
@@ -117,29 +111,36 @@ export const fetchData = async <Data = JSONResponse>(
   }
 };
 
+type Options = {
+  method?: 'GET' | 'POST';
+  headers?: Record<string, string>;
+  body?: Record<string, unknown>;
+};
+
 export const fetchJSON = async <Data = unknown>(
   url: string,
   options?: Options
 ) => {
+  let response: Response;
   if (!options || !('body' in options)) {
-    const response = await fetch(
+    response = await fetch(
       url,
       options ? (options as Omit<Options, 'body'>) : undefined
     );
-    return response.json<Data>();
+  } else {
+    const body = JSON.stringify(options.body);
+    response = await fetch(url, {
+      ...options,
+      method: 'POST',
+      headers: {
+        ...options.headers,
+      },
+      body,
+    });
   }
-  const body = JSON.stringify(options.body);
-  const response = await fetch(url, {
-    ...options,
-    method: 'POST',
-    headers: {
-      ...options.headers,
-    },
-    body,
-  });
   if (!response.ok) {
     const text = await response.text();
-    let body: JSONValue = text;
+    let body: unknown = text;
     try {
       body = JSON.parse(text);
     } catch {}
@@ -150,7 +151,7 @@ export const fetchJSON = async <Data = unknown>(
       body,
     });
   }
-  return response.json<Data>();
+  return response.json() as Data;
 };
 
 export const fetchText = async (url: string, options?: Options) => {
