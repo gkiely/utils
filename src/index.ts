@@ -21,7 +21,7 @@ export type JSONResponse = JSONObject | Array<JSONValue>;
 
 export const isEqual = fastDeepEqual as <A, B>(a: A, b: B) => boolean;
 
-export const assertType = <T>(_: unknown): asserts _ is T => {};
+export function assertType<T>(_: unknown): asserts _ is T {}
 
 export const pick = <T extends object, K extends keyof T>(
   obj: T,
@@ -133,14 +133,22 @@ export const fetchJSON = async <Data = unknown>(
     ...options,
     method: 'POST',
     headers: {
-      'content-type': 'application/json',
-      accept: 'application/json',
       ...options.headers,
     },
     body,
   });
   if (!response.ok) {
-    return Promise.reject(`Failed fetch: ${response.status}`);
+    const text = await response.text();
+    let body: JSONValue = text;
+    try {
+      body = JSON.parse(text);
+    } catch {}
+
+    return Promise.reject({
+      status: response.status,
+      statusText: response.statusText,
+      body,
+    });
   }
   return response.json<Data>();
 };
